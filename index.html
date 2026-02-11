@@ -45,6 +45,9 @@
         .animate-grow-y { animation: grow-y 1s ease-out forwards; }
         .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
         .animate-gradient { animation: gradient 8s ease infinite; }
+        /* Popup */
+        #bhr-popup { display: none; }
+        #bhr-popup.show { display: flex; }
         
         /* Initial state for scroll animations */
         .reveal-on-scroll {
@@ -144,106 +147,120 @@
             </div>
 
             <!-- Mobile Toggle -->
-            <button onclick="toggleMobileMenu()" class="md:hidden text-amber-400 z-50 p-2 hover:bg-stone-900 rounded transition-colors">
-                <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+            <button id="mobile-toggle" onclick="toggleMobileMenu()" aria-controls="mobile-menu" aria-expanded="false" class="md:hidden text-amber-400 z-50 p-2 hover:bg-stone-900 rounded transition-colors">
+                <i data-lucide="menu" id="menu-icon" class="w-6 h-6" aria-hidden="true"></i>
             </button>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-all duration-500 flex items-center justify-center opacity-0 invisible pointer-events-none">
-            <div class="flex flex-col items-center gap-8">
-                <!-- Namam Icon SVG -->
-                <svg viewBox="0 0 100 100" class="w-16 h-16" fill="none">
-                    <path d="M20 10 H35 V55 C35 70 45 80 50 80 C55 80 65 70 65 55 V10 H80 V55 C80 85 60 95 50 95 C40 95 20 85 20 55 V10 Z" fill="currentColor" class="text-stone-200"/>
-                    <path d="M46 10 H54 V85 H46 Z" fill="#dc2626"/>
-                </svg>
-                
-                <a href="#home" onclick="toggleMobileMenu()" class="text-2xl font-serif text-amber-100/90 hover:text-orange-400 transition-colors tracking-wide">Darshan</a>
-                <a href="#about" onclick="toggleMobileMenu()" class="text-2xl font-serif text-amber-100/90 hover:text-orange-400 transition-colors tracking-wide">Mahatmyam</a>
-                <a href="#reviews" onclick="toggleMobileMenu()" class="text-2xl font-serif text-amber-100/90 hover:text-orange-400 transition-colors tracking-wide">Anubhava</a>
-                <a href="#sevas" onclick="toggleMobileMenu()" class="text-2xl font-serif text-amber-100/90 hover:text-orange-400 transition-colors tracking-wide">Kainkaryam</a>
-                <a href="#location" onclick="toggleMobileMenu()" class="text-2xl font-serif text-amber-100/90 hover:text-orange-400 transition-colors tracking-wide">Kshetram</a>
-                
-                <div class="w-12 h-[1px] bg-stone-800 my-2"></div>
-                <button onclick="toggleMobileMenu(); document.getElementById('location').scrollIntoView({behavior: 'smooth'})" class="text-sm font-bold uppercase tracking-widest text-orange-500">
-                    Plan Your Visit
-                </button>
+        <!-- Mobile Menu Modal -->
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" class="md:hidden fixed inset-0 z-60 transition-all duration-300 hidden">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleMobileMenu()" aria-hidden="true"></div>
+            <div class="relative mx-auto my-24 max-w-sm w-[92%] bg-[#0c0a09] rounded-xl shadow-2xl overflow-hidden">
+                <div class="flex items-center justify-between p-4 border-b border-amber-900/20">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[#1c1917] border border-amber-900/30 flex items-center justify-center">
+                            <svg viewBox="0 0 100 100" class="w-6 h-6" fill="none"><path d="M20 10 H35 V55 C35 70 45 80 50 80 C55 80 65 70 65 55 V10 H80 V55 C80 85 60 95 50 95 C40 95 20 85 20 55 V10 Z" fill="currentColor" class="text-stone-200"/><path d="M46 10 H54 V85 H46 Z" fill="#dc2626"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-amber-100 font-bold">Menu</p>
+                        </div>
+                    </div>
+                    <button id="mobile-close" aria-label="Close menu" class="p-2 rounded-full hover:bg-white/5 mr-1" onclick="toggleMobileMenu()"><i data-lucide="x" class="w-5 h-5 text-amber-200"></i></button>
+                </div>
+                <div class="flex flex-col p-6 gap-4">
+                    <a href="/bhramostavam2026.html" onclick="toggleMobileMenu()" class="text-lg font-serif text-amber-100/90 hover:text-amber-300 transition-colors">Darshan</a>
+                    <a href="/bhramostavam2026.html" onclick="toggleMobileMenu()" class="text-lg font-serif text-amber-100/90 hover:text-amber-300 transition-colors">Mahatmyam</a>
+                    <a href="/bhramostavam2026.html" onclick="toggleMobileMenu()" class="text-lg font-serif text-amber-100/90 hover:text-amber-300 transition-colors">Anubhava</a>
+                    <a href="/bhramostavam2026.html" onclick="toggleMobileMenu()" class="text-lg font-serif text-amber-100/90 hover:text-amber-300 transition-colors">Kainkaryam</a>
+                    <a href="/bhramostavam2026.html" onclick="toggleMobileMenu()" class="text-lg font-serif text-amber-100/90 hover:text-amber-300 transition-colors">Kshetram</a>
+
+                    <div class="pt-4 border-t border-amber-900/20">
+                        <button onclick="toggleMobileMenu(); window.location.href='/bhramostavam2026.html'" class="w-full py-3 bg-amber-700 text-white rounded-md font-bold">Plan Your Visit</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header id="home" class="relative h-screen min-h-[850px] flex flex-col items-center justify-center overflow-hidden bg-[#050404]">
-        <!-- Background Layers -->
+    <header id="home" class="relative w-full bg-gradient-to-b from-[#070607] via-[#090807] to-[#050404]">
+        <!-- Background Layers (kept subtle) -->
         <div class="absolute inset-0 z-0">
-            <img 
-                src="https://images.unsplash.com/photo-1623933671236-0775d742eb55?q=80&w=2070&auto=format&fit=crop" 
-                alt="Temple Sanctum" 
-                class="w-full h-full object-cover opacity-50 mix-blend-luminosity scale-105 animate-subtle-zoom"
-            >
-            <!-- Intense gradient -->
-            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#0c0a09]"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,146,60,0.1),transparent_70%)]"></div>
+            <img src="https://i.ibb.co/sJzXBjPh/20260117-095137.jpg"  alt="Temple background" loading="lazy" decoding="async" fetchpriority="low" aria-hidden="true" class="w-full h-full object-cover brightness-50">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#050404]/90 via-transparent to-transparent"></div>
         </div>
 
-        <!-- Mandala Background (SVG) -->
-        <svg class="absolute opacity-[0.03] pointer-events-none animate-spin-very-slow w-[1000px] h-[1000px] text-amber-500/5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0" viewBox="0 0 100 100" fill="currentColor">
-            <path d="M50 0 C60 20 80 20 85 35 C90 50 85 65 75 75 C65 85 50 90 35 85 C20 80 20 60 0 50 C20 40 20 20 35 15 C50 10 65 15 75 25" />
-            <circle cx="50" cy="50" r="10" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <circle cx="50" cy="50" r="20" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            <path d="M50 10 L50 90 M10 50 L90 50 M22 22 L78 78 M22 78 L78 22" stroke="currentColor" strokeWidth="0.5" />
-        </svg>
-
-        <!-- Main Content -->
-        <div class="relative z-10 container mx-auto px-6 flex flex-col items-center pt-10">
-            
-            <!-- Sacred Symbol in Floating Glass -->
-            <div class="mb-10 hero-animate-1">
-                <div class="p-1 rounded-full border border-amber-500/20 bg-black/20 backdrop-blur-md shadow-[0_0_40px_rgba(234,88,12,0.15)] animate-pulse-slow">
-                    <div class="p-6 rounded-full border border-amber-500/30">
-                        <svg viewBox="0 0 100 100" class="w-12 h-12 md:w-16 md:h-16 drop-shadow-[0_0_15px_rgba(220,38,38,0.6)]" fill="none">
-                            <path d="M20 10 H35 V55 C35 70 45 80 50 80 C55 80 65 70 65 55 V10 H80 V55 C80 85 60 95 50 95 C40 95 20 85 20 55 V10 Z" fill="currentColor" class="text-stone-200"/>
-                            <path d="M46 10 H54 V85 H46 Z" fill="#dc2626"/>
-                        </svg>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-28">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <!-- Visual / Event Card -->
+                <div class="order-2 md:order-1">
+                    <div class="rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-tr from-[#0b0a09] to-[#151210]">
+                        <div class="relative">
+                            <img src="https://res.cloudinary.com/dqoafctvv/image/upload/v1770814349/image_dolzfi.png" alt="Gopuram" loading="lazy" decoding="async" class="w-full h-64 md:h-96 object-cover">
+                            <div class="absolute inset-0 bg-black/30"></div>
+                            <div class="absolute top-4 left-4 bg-temple-gold/95 text-[#120900] px-3 py-2 rounded-md font-heading font-bold">Feb 20 • 09:00 AM</div>
+                            <div class="absolute bottom-4 left-4 text-white max-w-xs">
+                                <h3 class="text-2xl md:text-3xl font-heading leading-tight">Sri Venkateshwara Kalyanam</h3>
+                                <p class="text-sm md:text-base mt-1 opacity-90">Chittigidda — Annual Festival & Rathotsavam</p>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-6 flex items-center gap-4 bg-[#080707]">
+                            <a href="/bhramostavam2026.html" class="inline-flex items-center gap-2 px-4 py-2 font-bold rounded-md hover:brightness-95 focus:ring-4" style="background-color:#DAA520;color:#000;" aria-label="Open Invitation">Open Invitation <i data-lucide="file-text" class="w-4 h-4"></i></a>
+                            <a href="/bhramostavam2026.html" class="ml-auto text-sm" style="color:#fff;" aria-label="View Schedule">View Schedule →</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Main Title Block -->
-            <div class="text-center space-y-4 md:space-y-6 max-w-5xl mx-auto">
-                <h2 class="text-amber-300/80 text-[10px] md:text-sm tracking-[0.6em] uppercase font-bold hero-animate-2">
-                    Swayambhu Kshetram
-                </h2>
-                
-                <!-- Massive Title -->
-                <h1 class="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-amber-300 to-amber-600 drop-shadow-2xl tracking-tight leading-tight hero-animate-3">
-                    Vaikuntha
-                </h1>
+                <!-- Text / CTA -->
+                <div class="order-1 md:order-2 text-center md:text-left">
+                    <p class="text-sm uppercase tracking-widest text-temple-gold font-bold mb-2">Swayambhu Kshetram</p>
 
-                <div class="flex items-center justify-center gap-4 opacity-90 hero-animate-4">
-                    <div class="h-[1px] w-8 md:w-16 bg-amber-500/50"></div>
-                    <span class="text-xl md:text-3xl font-serif italic text-amber-200/90 font-light">of Chittigidda</span>
-                    <div class="h-[1px] w-8 md:w-16 bg-amber-500/50"></div>
-                </div>
-            </div>
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight text-temple-cream mb-4 text-center md:text-left">
+                        <span class="show-en block">Sri Venkateshwara Swamy's — Vaikuntha</span>
+                        <span class="show-te block font-telugu">శ్రీ వేంకటేశ్వర స్వామి</span>
+                    </h1>
 
-            <!-- Shloka Card -->
-            <div class="mt-12 md:mt-16 p-6 md:p-8 bg-[#1c1917]/30 backdrop-blur-sm border border-amber-900/20 rounded-2xl max-w-xl mx-auto text-center hover:bg-[#1c1917]/50 hover:border-amber-700/40 transition-all duration-500 hero-animate-5">
-                <p class="text-xl md:text-2xl text-amber-100/90 font-serif mb-3 leading-relaxed">ॐ नमो वेङ्कटेशाय</p>
-                <p class="text-stone-500 text-[10px] md:text-xs tracking-[0.3em] uppercase">Om Namo Venkatesaya</p>
-            </div>
+                    <p class="text-base md:text-lg text-[#e6dccb] max-w-xl mb-6 show-en">Join us for the annual Brahmotsavam and sacred Kalyanam at Chittigidda. All devotees are invited to attend the ceremonies, processions, and cultural programs.</p>
+                    <p class="text-base md:text-lg text-[#e6dccb] max-w-xl mb-6 show-te font-telugu">భ్రమోత్సవ మరియు కళ్యాణ మహోత్సవానికి మీ అందరినీ ఆహ్వానిస్తున్నాము. కార్యక్రమాలలో భాగస్వామ్యం చేయండి.</p>
 
-            <!-- Scroll Indicator -->
-            <div class="mt-12 md:mt-20 hero-animate-5">
-                <button onclick="document.getElementById('location').scrollIntoView({behavior: 'smooth'})" class="group flex flex-col items-center gap-3 text-amber-400/50 hover:text-amber-300 transition-colors">
-                    <span class="text-[9px] md:text-[10px] uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-opacity duration-300">Begin Darshan</span>
-                    <div class="p-2 rounded-full border border-amber-500/10 group-hover:border-amber-500/40 transition-colors">
-                        <i data-lucide="chevron-down" class="w-5 h-5 animate-bounce"></i>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center md:items-start">
+                        <button onclick="window.location.href='/bhramostavam2026.html'" class="px-6 py-3 rounded-md font-semibold" style="background-color:#8B0000;color:#fff;">View Schedule</button>
+                        <a href="/bhramostavam2026.html" class="px-6 py-3 rounded-md font-semibold transition-colors text-center" style="border:1px solid #DAA520;color:#DAA520;">Open Invitation</a>
+                        <a href="/bhramostavam2026.html" class="mt-2 sm:mt-0 text-sm" style="color:#fff;">Get Directions</a>
                     </div>
-                </button>
+                </div>
             </div>
         </div>
     </header>
+
+    <!-- Bhramostavam Popup -->
+    <div id="bhr-popup" class="fixed inset-0 z-50 hidden items-center justify-center p-4" aria-hidden="true" role="dialog" aria-labelledby="bhr-title">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+        <div id="bhr-card" class="relative max-w-3xl w-full bg-gradient-to-tr from-white to-[#fff7ed] rounded-xl shadow-2xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+            <button id="bhr-close" aria-label="Close invitation" class="absolute top-3 right-3 z-20 bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="md:col-span-1">
+                    <img src="https://res.cloudinary.com/dqoafctvv/image/upload/v1770814349/image_dolzfi.png" alt="Temple view" loading="lazy" decoding="async" class="w-full h-48 md:h-full object-cover">
+                </div>
+                <div class="p-6 md:col-span-2">
+                    <h3 id="bhr-title" class="text-2xl font-heading font-bold text-[#1a1110] mb-1">Bhramostavam 2026</h3>
+                    <p class="text-sm text-gray-700 mb-3">Celebrate the annual Brahmotsavam and Kalyanam at Sri Venkateshwara Swamy Devasthanam, Chittigidda — Feb 20, 2026 at 09:00 AM.</p>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <a id="bhr-open" href="/bhramostavam2026.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-md font-semibold shadow" style="background-color:#8B0000;color:#fff;">Open Invitation</a>
+                        <a href="/bhramostavam2026.html" class="px-4 py-2 rounded-md font-semibold" style="border:1px solid #DAA520;color:#DAA520;">View Schedule</a>
+                        <a href="/bhramostavam2026.html" class="ml-auto text-sm" style="color:#666;">Get Directions</a>
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-3">
+                        <label class="inline-flex items-center text-sm text-gray-700"><input id="bhr-dont" type="checkbox" class="mr-2">Don't show again</label>
+                        <button id="bhr-close-2" class="px-3 py-1 text-sm text-gray-600 hover:underline">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Divider -->
     <div class="flex items-center justify-center gap-4 py-12 opacity-80 bg-[#0c0a09]">
@@ -580,22 +597,36 @@
             }
         });
 
-        // Mobile Menu Logic
+        // Mobile Menu Logic (open modal-style menu on mobile)
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('menu-icon');
-            
-            if (menu.classList.contains('invisible')) {
-                // Open
-                menu.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-                menu.classList.add('opacity-100', 'visible');
-                // Replace menu icon with X (manually since lucide re-renders)
-                // Note: Simpler to just let user click same button or links to close
+            const toggleBtn = document.getElementById('mobile-toggle');
+
+            if (!menu) return;
+
+            const isHidden = menu.classList.contains('hidden');
+
+            if (isHidden) {
+                // Open modal
+                menu.classList.remove('hidden');
+                menu.setAttribute('aria-hidden', 'false');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                icon.setAttribute('data-lucide', 'x');
+                // focus first link
+                setTimeout(() => {
+                    const first = menu.querySelector('a, button');
+                    first && first.focus();
+                }, 120);
             } else {
-                // Close
-                menu.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-                menu.classList.remove('opacity-100', 'visible');
+                // Close modal
+                menu.classList.add('hidden');
+                menu.setAttribute('aria-hidden', 'true');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                icon.setAttribute('data-lucide', 'menu');
             }
+
+            try { lucide.createIcons(); } catch (e) {}
         }
 
         // Modal Logic
@@ -634,6 +665,73 @@
 
         document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
             observer.observe(el);
+        });
+
+        // --- Bhramostavam Popup Logic ---
+        const bhrPopup = document.getElementById('bhr-popup');
+        const bhrCard = document.getElementById('bhr-card');
+        const bhrClose = document.getElementById('bhr-close');
+        const bhrClose2 = document.getElementById('bhr-close-2');
+        const bhrOpen = document.getElementById('bhr-open');
+        const bhrDont = document.getElementById('bhr-dont');
+
+        function shouldShowBhr() {
+            try {
+                return !localStorage.getItem('bhr-popup-dismissed');
+            } catch (e) { return true; }
+        }
+
+        function showBhrPopup() {
+            if (!bhrPopup || !shouldShowBhr()) return;
+            bhrPopup.classList.remove('hidden');
+            bhrPopup.classList.add('show');
+            bhrPopup.setAttribute('aria-hidden', 'false');
+            // animate card
+            setTimeout(() => {
+                bhrCard.classList.remove('scale-95','opacity-0');
+                bhrCard.classList.add('scale-100','opacity-100');
+                bhrOpen && bhrOpen.focus();
+            }, 50);
+        }
+
+        function hideBhrPopup() {
+            if (!bhrPopup) return;
+            // if dont checked, remember
+            try {
+                if (bhrDont && bhrDont.checked) localStorage.setItem('bhr-popup-dismissed', '1');
+            } catch (e) {}
+            // animate out
+            bhrCard.classList.remove('scale-100','opacity-100');
+            bhrCard.classList.add('scale-95','opacity-0');
+            setTimeout(() => {
+                bhrPopup.classList.add('hidden');
+                bhrPopup.classList.remove('show');
+                bhrPopup.setAttribute('aria-hidden', 'true');
+            }, 220);
+        }
+
+        if (bhrClose) bhrClose.addEventListener('click', hideBhrPopup);
+        if (bhrClose2) bhrClose2.addEventListener('click', hideBhrPopup);
+        // allow ESC to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hideBhrPopup();
+        });
+
+        // Show popup on homepage every 40s, respects localStorage
+        (function scheduleBhrPopup() {
+            if (!document.getElementById('home')) return;
+            if (!shouldShowBhr()) return;
+            setTimeout(showBhrPopup, 3000);
+            setInterval(() => { if (shouldShowBhr()) showBhrPopup(); }, 40000);
+        })();
+
+        // Fallback: ensure any click inside hero redirects to invitation page
+        document.querySelectorAll('#home a, #home button').forEach(el => {
+            el.addEventListener('click', (e) => {
+                // allow popup controls to function (they are outside #home)
+                e.preventDefault();
+                window.location.href = '/bhramostavam2026.html';
+            });
         });
     </script>
 </body>
